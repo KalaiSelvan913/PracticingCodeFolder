@@ -1,4 +1,4 @@
-Git Command Notes
+Git Command Notes :
 
   -> "git init" for initalizing the table
 
