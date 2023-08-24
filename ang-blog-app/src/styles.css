@@ -1,1 +1,11 @@
 /* You can add global styles to this file, and also import other style files */
+
+@import '~bootstrap/dist/css/bootstrap.min.css';
+
+:root{
+  --primary-color: #026467 !important;
+  --secondary-color: #E5F5EA !important;
+  --body-text-color: #596392 !important;
+  --navbar-footer-color: #f9f9f9 !important;
+}
+
