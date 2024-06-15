@@ -47,6 +47,7 @@ public class SecurityConfig {
 
 
     @Bean
+	/* Authorization */
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         /* SpringBoot 3.0 */
         return http.csrf().disable()
