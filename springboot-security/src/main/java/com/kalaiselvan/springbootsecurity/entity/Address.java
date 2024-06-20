@@ -1,4 +1,4 @@
-package com.kalaiselvan.springbootsecurity;
+package com.kalaiselvan.springbootsecurity.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
