@@ -25,6 +25,9 @@ public class GenericExceptionHandling {
         }else if(e instanceof DepartmentAlreadyExistsException) {
         	response.setMessage("Department Code is Already Exist");
         	status = HttpStatus.CONFLICT;
+        }else if(e instanceof RuntimeException) {
+        	response.setMessage(e.getMessage());
+        	status = HttpStatus.BAD_REQUEST;
         }
         return new ResponseEntity<ResponseDto<T>>(response,status);
 	}

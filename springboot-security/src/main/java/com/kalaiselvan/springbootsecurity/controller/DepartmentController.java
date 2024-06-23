@@ -53,6 +53,11 @@ public class DepartmentController {
 			return exceptionHandler.handleException(e);
 		}
 	}
+	
+	@PostMapping("/update")
+	public ResponseEntity<ResponseDto<String>> updateDeparment(@RequestBody DepartmentDto deptDto){
+		return deptService.editDepartment(deptDto); 
+	}
 
 	
 
