@@ -55,7 +55,7 @@ public class SecurityConfig {
                 .requestMatchers("/products/welcome","/products/new", "products/authenticate").permitAll()
                 .and()
                 .authorizeHttpRequests()
-                .requestMatchers("/products/**").authenticated()
+                .requestMatchers("/**").authenticated()
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)

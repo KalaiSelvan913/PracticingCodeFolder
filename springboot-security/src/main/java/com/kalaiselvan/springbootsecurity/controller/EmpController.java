@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.kalaiselvan.springbootsecurity.dto.ResponseDto;
 
 @RestController
-@RequestMapping("v1/emp")
+@RequestMapping("api/v1/emp")
 public class EmpController {
 	
 	

@@ -2,6 +2,7 @@ package com.kalaiselvan.springbootsecurity.entity;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import com.kalaiselvan.springbootsecurity.enums.Gender;
 
@@ -25,7 +26,11 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "employees")
 public class Employee {
@@ -71,11 +76,6 @@ public class Employee {
     @Column(name="hire_date")
     private LocalDate hireDate;
 
-    @NotBlank(message = "Job title is required")
-    @Size(max = 50, message = "Job title cannot exceed 50 characters")
-    @Column(name="job_title")
-    private String jobTitle;
-
     @NotNull(message = "Department ID is required")
     @ManyToOne
     @JoinColumn(name="department_id")
@@ -93,26 +93,28 @@ public class Employee {
     @NotNull(message="Address is required")
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="address_id", referencedColumnName = "id")
-    private String address;
+    private Address address;
+    
+    @NotNull(message = "Status is Required")
+    @Column(name = "status")
+    private String status;
+    
+    @NotNull(message = "Created By is required")
+	@Column(name = "created_by")
+	private String createdBy;
 
-    @NotBlank(message = "City is required")
-    @Size(max = 50, message = "City cannot exceed 50 characters")
-    @Column(name="city")
-    private String city;
+	@NotNull(message = "Created Date is required")
+    @PastOrPresent(message = "Created Date must be in the past")
+	@Column(name = "created_date")
+	private LocalDate createdDate;
+    
+	@NotNull(message = "Modified By is required")
+	@Column(name = "modified_by")
+	private String modifiedBy;
 
-    @NotBlank(message = "State is required")
-    @Size(max = 50, message = "State cannot exceed 50 characters")
-    @Column(name="state")
-    private String state;
+	@NotNull(message = "Modified Date is required")
+	@Column(name = "modified_date")
+	private LocalDateTime modifiedDate;
 
-    @NotBlank(message = "Zip code is required")
-    @Size(max = 10, message = "Zip code cannot exceed 10 characters")
-    @Column(name="zip_code")
-    private String zipCode;
-
-    @NotBlank(message = "Country is required")
-    @Size(max = 50, message = "Country cannot exceed 50 characters")
-    @Column(name="country")
-    private String country;
 
 }

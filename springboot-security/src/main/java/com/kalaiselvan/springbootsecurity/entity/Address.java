@@ -4,10 +4,15 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "addresses")
 public class Address {
@@ -35,5 +40,8 @@ public class Address {
 	    @NotBlank(message = "Country is required")
 	    @Size(max = 50, message = "Country cannot exceed 50 characters")
 	    private String country;
+	    
+	    @OneToOne(mappedBy = "address")
+	    private Employee employee;
 
 }
