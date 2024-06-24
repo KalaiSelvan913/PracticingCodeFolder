@@ -3,6 +3,7 @@ package com.kalaiselvan.springbootsecurity.service.impl;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -60,8 +61,8 @@ public class DepartmentServiceImpl implements DepartmentService {
 	@Override
 	public ResponseDto<List<DepartmentDto>> getDeptDetails() {
 		ResponseDto<List<DepartmentDto>> response = new ResponseDto<>();
-		List<Department> deptList =  deptRepo.findAllByOrderByDepartmentNameAsc();
-		if(deptList == null ) throw new DepartmentNotFoundException("All Records"); 
+		List<Department> deptList = Optional.of(deptRepo.findAllByOrderByDepartmentNameAsc())
+				.filter(dept -> !dept.isEmpty()).orElseThrow(() -> new DepartmentNotFoundException("No departments found"));
 		List<DepartmentDto> deptDtoList = mapper.mapAll(deptList, DepartmentDto.class);
 		response.setData(deptDtoList);
 		response.setMessage(ComConstants.SUCCESS);
@@ -82,10 +83,11 @@ public class DepartmentServiceImpl implements DepartmentService {
 			if(savedDept == null) throw new RuntimeException("Department is not updated, Re-Try Again"); 
 			response.setMessage(ComConstants.SUCCESS);
 			response.setStatus(HttpStatus.OK.value());
-			return new ResponseEntity<>(response,HttpStatus.OK);
 		}catch (Exception e) {
-			return exceptionHandler.handleException(e);
+//			return exceptionHandler.handleException(e);
+			e.printStackTrace();
 		}
+		return new ResponseEntity<>(response,HttpStatus.OK);
 	}
 
 
