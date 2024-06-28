@@ -16,5 +16,9 @@ public interface DepartmentRepo extends JpaRepository<Department, Long> {
 
 	List<Department> findAllByOrderByDepartmentNameAsc();
 
+//	List<Department> findAllByDepartmentCode(List<String> deptCode);
+
+	List<Department> findByDepartmentCodeIn(List<String> deptCode);
+
 
 }

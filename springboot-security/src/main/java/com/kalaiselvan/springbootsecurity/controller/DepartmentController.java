@@ -55,7 +55,7 @@ public class DepartmentController {
 	}
 	
 	@PostMapping("/update")
-	public ResponseEntity<ResponseDto<String>> updateDeparment(@RequestBody DepartmentDto deptDto){
+	public ResponseEntity<ResponseDto<String>> updateDeparment(@RequestBody List<DepartmentDto> deptDto){
 		return deptService.editDepartment(deptDto); 
 	}
 

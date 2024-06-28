@@ -13,6 +13,6 @@ public interface DepartmentService {
 
 	ResponseDto<List<DepartmentDto>> getDeptDetails();
 
-	ResponseEntity<ResponseDto<String>> editDepartment(DepartmentDto deptDto);
+	ResponseEntity<ResponseDto<String>> editDepartment(List<DepartmentDto> deptDto);
 
 }
