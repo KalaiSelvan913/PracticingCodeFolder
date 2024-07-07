@@ -18,27 +18,35 @@ import com.kalaiselvan.springbootsecurity.constants.ComConstants;
 import com.kalaiselvan.springbootsecurity.dto.DepartmentDto;
 import com.kalaiselvan.springbootsecurity.dto.ResponseDto;
 import com.kalaiselvan.springbootsecurity.entity.Department;
+import com.kalaiselvan.springbootsecurity.entity.Sequence.SeqGenerator;
+import com.kalaiselvan.springbootsecurity.entity.Sequence.SequenceConstants;
 import com.kalaiselvan.springbootsecurity.exception.DepartmentAlreadyExistsException;
 import com.kalaiselvan.springbootsecurity.exception.DepartmentNotFoundException;
 import com.kalaiselvan.springbootsecurity.mapping.GenericMapping;
 import com.kalaiselvan.springbootsecurity.repository.DepartmentRepo;
 import com.kalaiselvan.springbootsecurity.service.DepartmentService;
+import com.kalaiselvan.springbootsecurity.utils.ResponseUtils;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class DepartmentServiceImpl implements DepartmentService {
 
 	private final DepartmentRepo deptRepo;
 
 	private final GenericMapping mapper;
 	
+	private final SeqGenerator seqGenerator;
+	
 	private static final Logger logger = LoggerFactory.getLogger(DepartmentServiceImpl.class); 
 
 //	private final GenericExceptionHandling exceptionHandler;
 
-	public DepartmentServiceImpl(DepartmentRepo deptRepo, GenericMapping mapper) {
-		this.deptRepo = deptRepo;
-		this.mapper = mapper;
-	}
+//	public DepartmentServiceImpl(DepartmentRepo deptRepo, GenericMapping mapper) {
+//		this.deptRepo = deptRepo;
+//		this.mapper = mapper;
+//	}
 
 	@Override
 	public String saveDepartment(DepartmentDto deptDto) {
@@ -47,13 +55,12 @@ public class DepartmentServiceImpl implements DepartmentService {
 			throw new DepartmentAlreadyExistsException("Department Code is Already Exist");
 
 		Department department = mapper.map(deptDto, Department.class);
+		department.setDepartmentCode(seqGenerator.generateSeqCode(SequenceConstants.DEPARTMENT_CODE));
+		department.setStatus(ComConstants.ACTIVE);
 		department.setCreatedBy(ComConstants.ADMIN);
 		department.setCreatedDate(LocalDate.now());
-		department.setModifiedBy(ComConstants.ADMIN);
-		department.setModifiedDate(LocalDateTime.now());
-		department.setStatus(ComConstants.ACTIVE);
-//		Department savedDept = deptRepo.save(department);
-//		savedDept.setDepartmentCode(ComUtils.generateDeptCode(savedDept.getId()));
+		department.setLastModifiedBy(ComConstants.ADMIN);
+		department.setLastModifiedDate(LocalDateTime.now());
 
 		String response = deptRepo.save(department) != null ? ComConstants.SUCCESS : ComConstants.TRY_AGAIN;
 		logger.info("saveDeparment Service Ended");
@@ -68,9 +75,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 				.filter(dept -> !dept.isEmpty())
 				.orElseThrow(() -> new DepartmentNotFoundException("No departments found"));
 		List<DepartmentDto> deptDtoList = mapper.mapAll(deptList, DepartmentDto.class);
-		response.setData(deptDtoList);
-		response.setMessage(ComConstants.SUCCESS);
-		response.setStatus(HttpStatus.OK.value());
+		response = ResponseUtils.successResponse(deptDtoList);
 		logger.info("getDeptDetails Service Ended");
 		return response;
 	}
@@ -89,12 +94,9 @@ public class DepartmentServiceImpl implements DepartmentService {
 			existingDept.forEach(dept -> {
 				DepartmentDto dto = dtoMap.get(dept.getDepartmentCode());
 				mapper.map(dto, dept);
-				dept.setModifiedBy(ComConstants.ADMIN);
-				dept.setModifiedDate(LocalDateTime.now());
 			});
 			Optional.of(deptRepo.saveAll(existingDept)).orElseThrow(() -> new RuntimeException("Department is not updated, Re-Try Again"));
-			response.setMessage(ComConstants.SUCCESS);
-			response.setStatus(HttpStatus.OK.value());
+			response = ResponseUtils.successResponse(null);
 			
 //			List<Department> deptList = Optional.of(deptRepo.findByDepartmentCode(deptDto.getDepartmentCode()))
 //					.filter(dept -> !dept.isEmpty()).orElseThrow(() -> new DepartmentNotFoundException("No departments found"));

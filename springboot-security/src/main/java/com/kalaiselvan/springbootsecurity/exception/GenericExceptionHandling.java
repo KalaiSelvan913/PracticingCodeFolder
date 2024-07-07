@@ -7,10 +7,12 @@ import org.springframework.stereotype.Component;
 
 import com.kalaiselvan.springbootsecurity.dto.ResponseDto;
 
+import jakarta.validation.ConstraintViolationException;
+
 @Component
 public class GenericExceptionHandling {
 	
-	public <T> ResponseEntity<ResponseDto<T>> handleException(Exception e){
+	public static <T> ResponseEntity<ResponseDto<T>> handleException(Exception e){
 		ResponseDto<T> response = new ResponseDto<>();
 		// Log the exception for debugging
 		e.printStackTrace();
@@ -26,6 +28,12 @@ public class GenericExceptionHandling {
         	response.setMessage("Department Code is Already Exist");
         	status = HttpStatus.CONFLICT;
         }else if(e instanceof RuntimeException) {
+        	response.setMessage(e.getMessage());
+        	status = HttpStatus.BAD_REQUEST;
+        }else if(e instanceof EmployeeNotFoundException) {
+        	response.setMessage(e.getMessage());
+        	status = HttpStatus.NOT_FOUND;
+        }else if(e instanceof ConstraintViolationException) {
         	response.setMessage(e.getMessage());
         	status = HttpStatus.BAD_REQUEST;
         }

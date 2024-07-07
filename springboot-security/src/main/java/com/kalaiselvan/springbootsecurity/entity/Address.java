@@ -1,10 +1,11 @@
 package com.kalaiselvan.springbootsecurity.entity;
 
+import java.io.Serializable;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -15,9 +16,14 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "addresses")
-public class Address {
+public class Address implements Serializable {
 	
-	 	@Id
+	 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+		@Id
 	    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	    private Long id;
 
@@ -40,8 +46,6 @@ public class Address {
 	    @NotBlank(message = "Country is required")
 	    @Size(max = 50, message = "Country cannot exceed 50 characters")
 	    private String country;
-	    
-	    @OneToOne(mappedBy = "address")
-	    private Employee employee;
+
 
 }

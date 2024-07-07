@@ -21,12 +21,9 @@ public class DepartmentController {
 
 	private final DepartmentService deptService;
 
-	private final GenericExceptionHandling exceptionHandler;
-
-	public DepartmentController(DepartmentService deptService, GenericExceptionHandling exceptionHandler) {
+	public DepartmentController(DepartmentService deptService) {
 
 		this.deptService = deptService;
-		this.exceptionHandler = exceptionHandler;
 
 	}
 
@@ -39,7 +36,7 @@ public class DepartmentController {
 			responseDto.setStatus(HttpStatus.CREATED.value());
 			return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
 		} catch (Exception e) {
-			return exceptionHandler.handleException(e);
+			return GenericExceptionHandling.handleException(e);
 		}
 	}
 	
@@ -50,7 +47,7 @@ public class DepartmentController {
 			response = deptService.getDeptDetails();
 			return new ResponseEntity<>(response,HttpStatus.OK);
 		}catch (Exception e) {
-			return exceptionHandler.handleException(e);
+			return GenericExceptionHandling.handleException(e);
 		}
 	}
 	

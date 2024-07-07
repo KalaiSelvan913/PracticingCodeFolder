@@ -2,6 +2,7 @@ package com.kalaiselvan.springbootsecurity.dto;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Set;
 
 import com.kalaiselvan.springbootsecurity.enums.Gender;
 
@@ -17,11 +18,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 
-
 @Getter
 @Setter
 public class EmpDto {
-
 	@NotBlank(message = "First name is required")
 	@Size(max = 50, message = "First name cannot exceed 50 characters")
 	private String firstName;
@@ -50,10 +49,6 @@ public class EmpDto {
 	@PastOrPresent(message = "Hire date cannot be in the future")
 	private LocalDate hireDate;
 
-	@NotBlank(message = "Job title is required")
-	@Size(max = 50, message = "Job title cannot exceed 50 characters")
-	private String jobTitle;
-
 	@NotNull(message = "Department ID is required")
 	private Long departmentId;
 
@@ -62,9 +57,15 @@ public class EmpDto {
 	@Digits(integer = 10, fraction = 2, message = "Salary must be a valid monetary amount")
 	private BigDecimal salary;
 
+	@NotNull(message = "Manager ID is required")
 	private Long managerId;
 
 	@NotNull(message = "Address is required")
-    private AddressDto address;
+	private AddressDto address;
 
+	@NotNull(message = "Status is required")
+	private String status;
+
+	@NotNull(message = "Role IDs are required")
+	private Set<String> roles;
 }
