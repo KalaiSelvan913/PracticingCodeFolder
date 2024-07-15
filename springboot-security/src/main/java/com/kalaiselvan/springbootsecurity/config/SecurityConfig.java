@@ -29,9 +29,9 @@ public class SecurityConfig {
     @Autowired
     private JwtAuthFilter authfilter;
 
-    @Bean
     //authentication
-    public UserDetailsService userDetailsService() {
+    @Bean
+    UserDetailsService userDetailsService() {
 //        UserDetails admin = User.withUsername("Kalai")
 //                .password(encoder.encode("Pwd1"))
 //                .roles("ADMIN")
@@ -46,9 +46,9 @@ public class SecurityConfig {
     }
 
 
+    /* Authorization */
     @Bean
-	/* Authorization */
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         /* SpringBoot 3.0 */
         return http.csrf().disable()
                 .authorizeHttpRequests()
@@ -73,13 +73,13 @@ public class SecurityConfig {
 
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
+    PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
 
     @Bean
-    public AuthenticationProvider authenticationProvider() {
+    AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
         authenticationProvider.setUserDetailsService(userDetailsService());
         authenticationProvider.setPasswordEncoder(passwordEncoder());
@@ -87,7 +87,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+    AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
 

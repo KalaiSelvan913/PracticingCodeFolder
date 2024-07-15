@@ -2,18 +2,18 @@ package com.kalaiselvan.springbootsecurity.service.impl;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,9 +23,7 @@ import com.kalaiselvan.springbootsecurity.dto.EmpDto;
 import com.kalaiselvan.springbootsecurity.dto.ResponseDto;
 import com.kalaiselvan.springbootsecurity.dto.RolesDto;
 import com.kalaiselvan.springbootsecurity.dto.response.EmployeeResponseDto;
-import com.kalaiselvan.springbootsecurity.entity.Department;
 import com.kalaiselvan.springbootsecurity.entity.Employee;
-import com.kalaiselvan.springbootsecurity.entity.Role;
 import com.kalaiselvan.springbootsecurity.entity.Sequence.SeqGenerator;
 import com.kalaiselvan.springbootsecurity.entity.Sequence.SequenceConstants;
 import com.kalaiselvan.springbootsecurity.exception.DepartmentNotFoundException;
@@ -112,20 +110,22 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	@Override
-	public ResponseEntity<ResponseDto<List<EmployeeResponseDto>>> getAllEmployee() {
+	public ResponseEntity<ResponseDto<Page<EmployeeResponseDto>>> getAllEmployee(int page, int size, String[] sort) {
 		logger.info("getAllEmployee service started");
-		ResponseDto<List<EmployeeResponseDto>> response = new ResponseDto<>();
+		ResponseDto<Page<EmployeeResponseDto>> response = new ResponseDto<>(); 	
 		try {
-			List<Employee> empList = Optional.of(empRepo.findAll())
+			Sort sorts = ComUtils.parseSortParams(sort);
+			Pageable pageable = PageRequest.of(page, size, sorts);
+			Page<Employee> empList = Optional.of(empRepo.findAll(pageable))
 					.orElseThrow(() -> new EmployeeNotFoundException("Employee Detail Not Found"));
-			List<EmployeeResponseDto> empDtoList = new ArrayList<>();
-			empList.forEach(emp -> {
-				EmployeeResponseDto empDto = mapper.map(emp, EmployeeResponseDto.class);
-				empDto.setRoles(mapper.mapAll(emp.getRoles(), RolesDto.class).stream()
-						.collect(Collectors.toSet()));
-				empDto.setDepartment(mapper.map(emp.getDepartment(), DepartmentDto.class));
-				empDtoList.add(empDto);
-			});
+			Page<EmployeeResponseDto> empDtoList = empList.map(emp -> {
+                EmployeeResponseDto empDto = mapper.map(emp, EmployeeResponseDto.class);
+                empDto.setRoles(emp.getRoles().stream()
+                        .map(role -> mapper.map(role, RolesDto.class))
+                        .collect(Collectors.toSet()));
+                empDto.setDepartment(mapper.map(emp.getDepartment(), DepartmentDto.class));
+                return empDto;
+            });
 			response = ResponseUtils.successResponse(empDtoList);
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -2,6 +2,7 @@ package com.kalaiselvan.springbootsecurity.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 
 import com.kalaiselvan.springbootsecurity.dto.EmpDto;
@@ -12,7 +13,7 @@ public interface EmployeeService {
 
 	ResponseEntity<ResponseDto<List<EmployeeResponseDto>>> addEmployee(List<EmpDto> empList);
 	
-	ResponseEntity<ResponseDto<List<EmployeeResponseDto>>> getAllEmployee();
+	ResponseEntity<ResponseDto<Page<EmployeeResponseDto>>> getAllEmployee(int page, int size, String[] sort);
 	
 	ResponseEntity<ResponseDto<EmpDto>> getEmployeeById(Long id);
 	
