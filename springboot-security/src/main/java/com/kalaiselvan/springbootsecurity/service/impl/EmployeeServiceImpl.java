@@ -190,5 +190,23 @@ public class EmployeeServiceImpl implements EmployeeService {
 		logger.info("updateEmployee service ended");
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
+	
 
+//			if(empDetail.isPresent()) {
+//				Employee emp = empDetail.get();
+//			new EmpDto(
+//					emp.getFirstName(),
+//					emp.getLastName(),
+//					emp.getDateOfBirth(),
+//					emp.getGender(),
+//					emp.getEmail(),
+//					emp.getPhoneNumber(),
+//					emp.getHireDate(),
+//					emp.getAddress(),
+//					emp.getDepartment().getId(),
+//					emp.getSalary(),
+//					emp.getRoles()
+//					);
+//			}
+	
 }

@@ -15,12 +15,15 @@ import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 
 @Getter
 @Setter
+@RequiredArgsConstructor
 public class EmpDto {
+
 	@NotBlank(message = "First name is required")
 	@Size(max = 50, message = "First name cannot exceed 50 characters")
 	private String firstName;
@@ -68,4 +71,10 @@ public class EmpDto {
 
 	@NotNull(message = "Role IDs are required")
 	private Set<String> roles;
+	
+//	public EmpDto(String firstName2, String lastName2, LocalDate dateOfBirth2, Gender gender2, String email2,
+//			String phoneNumber2, LocalDate hireDate2, Address address2, Long id, BigDecimal salary2, Set<Role> roles2) {
+//		// TODO Auto-generated constructor stub
+//	}
+	
 }
